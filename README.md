@@ -6,8 +6,6 @@ from tkinter import messagebox
 
 
 root = Tk()
-#root.title('Codemy.com - Currenry Conversion')
-#root.iconbitmap('c:/gui/codemy.ico')
 root.geometry('500x500')
 
 #create tabs
