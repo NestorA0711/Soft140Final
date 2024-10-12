@@ -1,73 +1,97 @@
-# Soft140Final
-#Final project
+import tkinter as tk 
 from tkinter import *
-from tkinter import ttk 
-from tkinter import messagebox
+import tkinter.messagebox 
+root = tk.Tk()
+
+root.title("Currency converter")
+
+Tops = Frame(root, bg = '#e6e5e5', pady=1, width=100, height=50, relief="ridge")
+Tops.grid(row=0, column=0)
+
+headlabel = tk.Label(Tops, font=('lato black', 19, 'bold'), text='Currency converter ',
+					bg='#e6e5e5', fg='black')
+headlabel.grid(row=1, column=0, sticky=W)
+
+variable1 = tk.StringVar(root)
+variable2 = tk.StringVar(root)
+
+variable1.set("currency")
+variable2.set("currency")
+#Function To For Real Time Currency Conversion
+
+def RealTimeCurrencyConversion():
+	from forex_python.converter import CurrencyRates
+	c = CurrencyRates()
+
+	from_currency = variable1.get()
+	to_currency = variable2.get()
+
+	if (Amount1_field.get() == ""):
+		tkinter.messagebox.showinfo("Error !!", "Amount Not Entered.\n Please a valid amount.")
+
+	elif (from_currency == "currency" or to_currency == "currency"):
+		tkinter.messagebox.showinfo("Error !!",
+									"Currency Not Selected.\n Please select FROM and TO Currency form menu.")
+
+	else:
+		new_amt = c.convert(from_currency, to_currency, float(Amount1_field.get()))
+		new_amount = float("{:.4f}".format(new_amt))
+		Amount2_field.insert(0, str(new_amount))
+
+#clearing all the data entered by the user
+def clear_all():
+	Amount1_field.delete(0, tk.END)
+	Amount2_field.delete(0, tk.END)
 
 
-root = Tk()
-root.geometry('500x500')
+CurrenyCode_list = ["INR", "USD", "CAD", "CNY", "DKK", "EUR"]
 
-#create tabs
-myNotebook = ttk.Notebook(root)
-myNotebook.pack(pady=5)
+root.configure(background='#e6e5e5')
+root.geometry("500x500")
 
-#create two frames 
-currencyFrame = Frame(myNotebook, width = 480, height = 480)
-conversionFrame = Frame(myNotebook, width = 480, height = 480)
+Label_1 = Label(root, font=('lato black', 27, 'bold'), text="", padx=2, pady=2, bg="#e6e5e5", fg="black")
+Label_1.grid(row=1, column=0, sticky=W)
 
-currencyFrame.pack(fill='both',expand=1)
-conversionFrame.pack(fill='both',expand=1)
+label1 = tk.Label(root, font=('lato black', 15, 'bold'), text="\t Amount : ", bg="#e6e5e5", fg="black")
+label1.grid(row=2, column=0, sticky=W)
 
-#add tabs
-myNotebook.add(currencyFrame, text="Currencies")
-myNotebook.add(conversionFrame, text="Covert")
+label1 = tk.Label(root, font=('lato black', 15, 'bold'), text="\t From Currency : ", bg="#e6e5e5", fg="black")
+label1.grid(row=3, column=0, sticky=W)
 
-"""CURRENCY
-INFORMATION 
-"""
-def lock():
-    pass
+label1 = tk.Label(root, font=('lato black', 15, 'bold'), text="\t To Currency : ", bg="#e6e5e5", fg="black")
+label1.grid(row=4, column=0, sticky=W)
 
-def unlock():
-    pass
+label1 = tk.Label(root, font=('lato black', 15, 'bold'), text="\t Converted Amount : ", bg="#e6e5e5", fg="black")
+label1.grid(row=8, column=0, sticky=W)
 
-home = LabelFrame(currencyFrame, text='Your Home Currency')
-home.pack(pady=20)
+Label_1 = Label(root, font=('lato black', 7, 'bold'), text="", padx=2, pady=2, bg="#e6e5e5", fg="black")
+Label_1.grid(row=5, column=0, sticky=W)
 
-#home currency entry box
-HomeEntry = Entry(home, font =("Helvetica, 24"))
-HomeEntry.pack(pady=10 , padx=10)
+Label_1 = Label(root, font=('lato black', 7, 'bold'), text="", padx=2, pady=2, bg="#e6e5e5", fg="black")
+Label_1.grid(row=7, column=0, sticky=W)
 
-#conversion currency frame
-conversion = LabelFrame(currencyFrame, text="Conversion Currency")
-conversion.pack(pady=20)
+FromCurrency_option = tk.OptionMenu(root, variable1, *CurrenyCode_list)
+ToCurrency_option = tk.OptionMenu(root, variable2, *CurrenyCode_list)
 
-#convert to label
-conversionLabel = Label(conversion,text="Currency to Convert To...")
-conversionLabel.pack(pady=10)
+FromCurrency_option.grid(row=3, column=0, ipadx=45, sticky=E)
+ToCurrency_option.grid(row=4, column=0, ipadx=45, sticky=E)
 
-#covert to entry 
-conversionEntry = Entry(conversion, font=("Helvetica,24"))
-conversionEntry.pack(pady=10, padx=10)
+Amount1_field = tk.Entry(root)
+Amount1_field.grid(row=2, column=0, ipadx=28, sticky=E)
 
-#rate label
-rateLabel = Label(conversion,text="Currency to Convert To...")
-rateLabel.pack(pady=10)
+Amount2_field = tk.Entry(root)
+Amount2_field.grid(row=8, column=0, ipadx=31, sticky=E)
 
-#rate entry
-rateEntry = Entry(conversion, font=("Helvetica,24"))
-rateEntry.pack(pady=10, padx=10)
+Label_9 = Button(root, font=('arial', 15, 'bold'), text=" Convert ", padx=2, pady=2, bg="lightblue", fg="white",
+				command=RealTimeCurrencyConversion)
+Label_9.grid(row=6, column=0)
 
-#button frame
-buttonFrame = Frame(currencyFrame)
-buttonFrame.pack(pady=20)
+Label_1 = Label(root, font=('lato black', 7, 'bold'), text="", padx=2, pady=2, bg="#e6e5e5", fg="black")
+Label_1.grid(row=9, column=0, sticky=W)
 
-#create buttons
-lockbutton = Button(buttonFrame, text="Lock", command=lock)
-lockbutton.grid(row=0, column=0, padx=10)
+Label_9 = Button(root, font=('arial', 15, 'bold'), text=" Clear All ", padx=2, pady=2, bg="lightblue", fg="white",
+				command=clear_all)
+Label_9.grid(row=10, column=0)
 
-unlockbutton = Button(buttonFrame, text="Unlock", command=unlock)
-unlockbutton.grid(row=0, column=1, padx=10)
 
 root.mainloop()
